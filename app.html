@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Layout with Image</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000; /* Black background */
+        }
+        .status-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .status-container span {
+            font-size: 18px;
+            font-weight: bold;
+            color: white; /* White text */
+            margin-right: 5px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 5px;
+            background-color: red; /* Initial dot color */
+            animation: none;
+        }
+        .status-active .status-dot {
+            background-color: green; /* Dot color when active */
+            animation: blink 1s infinite; /* Blinking animation */
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            .status-container span {
+                font-size: 16px;
+            }
+            .status-dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        .video-container {
+            margin: 0;
+            padding: 0;
+        }
+        .video-container iframe {
+            width: 100%;
+            height: 500px; /* Adjust height as needed */
+            border: none;
+        }
+        .loading-container {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin: 20px 0;
+            display: none; /* Initially hidden */
+        }
+        .loading-container.active {
+            display: block; /* Shown when status is active */
+        }
+        .loading-container::after {
+            content: '...';
+            animation: dot-blink 1.5s infinite;
+        }
+        @keyframes dot-blink {
+            0%, 100% { content: '...'; }
+            50% { content: '.'; }
+        }
+        .activate-button {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .activate-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Add iframe for live stream at the top -->
+    <div class="video-container">
+        <iframe src="https://m.onabet.com/live-casino" title="Live Stream"></iframe>
+    </div>
+
+    <!-- Add loading text -->
+    <div class="loading-container" id="loading-message">
+        Analyzing
+    </div>
+
+    <div class="status-container" id="status-container" aria-label="Status: Inactive">
+        <span id="status-text">Inactive</span>
+        <div class="status-dot" id="status-dot" aria-hidden="true"></div>
+    </div>
+
+    <!-- Button to activate and deactivate status -->
+    <button class="activate-button" id="activate-button">Activate</button>
+
+    <script>
+        // Function to toggle status and show/hide loading message
+        function toggleStatus() {
+            const statusContainer = document.getElementById('status-container');
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const loadingMessage = document.getElementById('loading-message');
+            const button = document.getElementById('activate-button');
+
+            if (statusContainer.classList.contains('status-active')) {
+                // Deactivate status
+                statusContainer.classList.remove('status-active');
+                statusText.textContent = 'Inactive';
+                statusDot.style.backgroundColor = 'red';
+                loadingMessage.classList.remove('active');
+                button.textContent = 'Activate';
+            } else {
+                // Activate status
+                statusContainer.classList.add('status-active');
+                statusText.textContent = 'Active';
+                statusDot.style.backgroundColor = 'green';
+                loadingMessage.classList.add('active');
+                button.textContent = 'Deactivate';
+            }
+        }
+
+        // Set up the click event for the button
+        document.getElementById('activate-button').addEventListener('click', toggleStatus);
+    </script>
+
+
+</body></html>
+    
